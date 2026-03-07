@@ -2,3 +2,4 @@ sqlalchemy==2.0.36
 pymysql==1.1.1
 cryptography==42.0.8
 tenacity==9.0.0
+requests==2.32.3

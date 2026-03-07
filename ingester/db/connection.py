@@ -1,7 +1,7 @@
 import os
 from utils.logger import get_logger
 from sqlalchemy import create_engine, text
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 logger = get_logger(__name__)
 Base = declarative_base()
@@ -25,6 +25,9 @@ def test_connection(engine):
     with engine.connect() as conn:
         conn.execute(text("SELECT 1"))
         logger.info("Connection successful")
+        
+def get_session_factory(engine):
+    return sessionmaker(bind=engine, autocommit=False, autoflush=False)
         
 if __name__ == "__main__":
     engine = get_engine()
