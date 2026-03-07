@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "db/connection.py"]
+CMD ["sleep", "infinity"]

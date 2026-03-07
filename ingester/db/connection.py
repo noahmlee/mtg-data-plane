@@ -1,5 +1,8 @@
 import os
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 def get_engine():
     user = os.getenv("MYSQL_USER")
