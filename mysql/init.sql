@@ -1,11 +1,11 @@
-CREATE DATABASE IF NOT EXISTS mtg_prices;
-USE mtg_prices;
+CREATE DATABASE IF NOT EXISTS mtg_data;
+USE mtg_data;
 
 CREATE TABLE IF NOT EXISTS sets (
     code            VARCHAR(10)     PRIMARY KEY,
     name            VARCHAR(255)    NOT NULL,
     release_date    DATE,
-    set_type        VARCHAR(50)
+    set_type        VARCHAR(50),
     total_cards     INT             DEFAULT 0,
     created_at      TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
 
