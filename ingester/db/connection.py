@@ -1,7 +1,9 @@
 import os
+from utils.logger import get_logger
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import declarative_base
 
+logger = get_logger(__name__)
 Base = declarative_base()
 
 def get_engine():
@@ -14,12 +16,15 @@ def get_engine():
     url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
 
     engine = create_engine(url, pool_pre_ping=True)
+    
+    logger.info("Database engine created: %s:%s/%s", host, port, database)
+    
     return engine
 
 def test_connection(engine):
     with engine.connect() as conn:
         conn.execute(text("SELECT 1"))
-        print("Connection successful")
+        logger.info("Connection successful")
         
 if __name__ == "__main__":
     engine = get_engine()
