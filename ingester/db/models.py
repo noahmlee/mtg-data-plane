@@ -42,6 +42,28 @@ class CardPrice(Base):
     format = Column(String(20), nullable=False)
     price_usd = Column(DECIMAL(10, 2))
     
+class DailyStat(Base):
+    __tablename__ = "daily_stats"
+    __table_args__ =(
+        UniqueConstraint("stat_date", name="uq_stat_date"),
+    )
+    
+    id = Column(Integer, primary_key=True)
+    stat_date = Column(Date, nullable=False)
+    most_expensive_card_uuid = Column(String(36), ForeignKey("cards.uuid"))
+    most_expensive_card_price = Column(DECIMAL(10, 2))
+    avg_price_white = Column(DECIMAL(10,2))
+    avg_price_blue = Column(DECIMAL(10,2))
+    avg_price_green = Column(DECIMAL(10,2))
+    avg_price_black = Column(DECIMAL(10,2))
+    avg_price_red = Column(DECIMAL(10,2))
+    avg_price_multicolor = Column(DECIMAL(10,2))
+    avg_price_colorless = Column(DECIMAL(10,2))
+    avg_price_per_cmc = Column(JSON)
+    avg_price_per_rarity = Column(JSON)
+    total_cards_priced = Column(Integer, default=0)
+    created_at = Column(DateTime, server_default=func.now())
+    
 if __name__ == "__main__":
     from db.connection import get_engine
     engine = get_engine()
