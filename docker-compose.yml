@@ -41,5 +41,21 @@ services:
       mysql:
         condition: service_healthy
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: mtg_api
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
 volumes:
   mysql_data:
