@@ -65,7 +65,8 @@ def get_card(uuid: str, db: Session = Depends(get_db)):
         "rarity": result[4],
         "set_code": result[5],
         "collector_number": result[6],
-        "price": float(result[7])
+        "price": float(result[7]) if result[7] is not None else None,
+        "price_date": str(result[8]) if result[8] is not None else None,
     }
     
 @app.get("/stats/latest")
