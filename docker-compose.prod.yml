@@ -4,6 +4,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://${EC2_PUBLIC_IP}:8000
+        VITE_API_URL: http://mtga.noahlee.dev:8000
     ports:
       - "80:80"
