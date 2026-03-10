@@ -57,5 +57,15 @@ services:
       mysql:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mtg_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
 volumes:
   mysql_data:
