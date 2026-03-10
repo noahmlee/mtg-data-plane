@@ -28,10 +28,10 @@ def health():
     return{"status": "ok"}
 
 @app.get("/cards/search")
-def search_cards(name: str, db: Session = Depends(get_db)):
+def search_cards(name: str, limit: int = 50, db: Session = Depends(get_db)):
     results = db.execute(
-        text("SELECT uuid, name, mana_cost, color_identity, rarity, set_code, collector_number FROM cards WHERE name LIKE :name"),
-        {"name": f"%{name}%"}
+        text("SELECT uuid, name, mana_cost, color_identity, rarity, set_code, collector_number FROM cards WHERE name LIKE :name LIMIT :limit"),
+        {"name": f"%{name}%", "limit": limit}
     ).fetchall()
     
     return [
