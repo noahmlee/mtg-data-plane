@@ -114,6 +114,7 @@ class DailyStatsPipeline(BasePipeline):
         stmt = insert(DailyStat).values([data])
         stmt = stmt.on_duplicate_key_update(
             most_expensive_card_uuid=stmt.inserted.most_expensive_card_uuid,
+            most_expensive_card_name=stmt.inserted.most_expensive_card_name,
             most_expensive_card_price=stmt.inserted.most_expensive_card_price,
             avg_price_white=stmt.inserted.avg_price_white,
             avg_price_blue=stmt.inserted.avg_price_blue,
