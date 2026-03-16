@@ -4,6 +4,15 @@ import { API, COLOR_SYMBOLS } from "../constants";
 
 export default function StatsPanel() {
   const [stats, setStats] = useState(null);
+  const [mostExpensiveImage, setMostExpensiveImage] = useState(null);
+
+  useEffect(() => {
+    if (!stats?.most_expensive_card_uuid) return;
+    fetch(`https://api.scryfall.com/cards/${stats.most_expensive_card_uuid}`)
+      .then((res) => res.json())
+      .then((data) => setMostExpensiveImage(data.image_uris?.normal || null))
+      .catch(() => setMostExpensiveImage(null));
+  }, [stats]);
 
   useEffect(() => {
     axios.get(`${API}/stats/latest`).then((res) => setStats(res.data));
@@ -30,9 +39,19 @@ export default function StatsPanel() {
           }}
         >
           {stats.most_expensive_card_name ||
-            stats.most_expensive_card_uuid?.slice(0, 8)}
-          ...
+            stats.most_expensive_card_uuid?.slice(0, 8) + "..."}
         </div>
+        {mostExpensiveImage && (
+          <img
+            src={mostExpensiveImage}
+            alt={stats.most_expensive_card_name}
+            style={{
+              width: "100%",
+              borderRadius: "8px",
+              marginTop: "0.75rem",
+            }}
+          />
+        )}
       </div>
 
       <div className="stat-card">
