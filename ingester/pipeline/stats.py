@@ -15,7 +15,7 @@ class DailyStatsPipeline(BasePipeline):
         self.logger.info("Compiling stats for %s", self.today)
         
         most_expensive = self.session.execute(text("""
-            SELECT c.uuid, p.price_usd
+            SELECT c.uuid, c.name, p.price_usd
             FROM cards c
             JOIN prices p ON c.uuid = p.card_uuid
             WHERE p.price_date = :today AND p.format = 'normal'
@@ -96,7 +96,8 @@ class DailyStatsPipeline(BasePipeline):
         return {
             "stat_date": self.today,
             "most_expensive_card_uuid": most_expensive[0] if most_expensive else None,
-            "most_expensive_card_price": float(most_expensive[1]) if most_expensive else None,
+            "most_expensive_card_name": most_expensive[1] if most_expensive else None,
+            "most_expensive_card_price": float(most_expensive[2]) if most_expensive else None,
             "total_cards_priced": total,
             "avg_price_per_rarity": json.dumps(rarity_dict),
             "avg_price_per_cmc": json.dumps(cmc_dict),

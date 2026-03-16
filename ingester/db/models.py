@@ -51,6 +51,7 @@ class DailyStat(Base):
     id = Column(Integer, primary_key=True)
     stat_date = Column(Date, nullable=False)
     most_expensive_card_uuid = Column(String(36), ForeignKey("cards.uuid"))
+    most_expensive_card_name = Column(String(255))
     most_expensive_card_price = Column(DECIMAL(10, 2))
     avg_price_white = Column(DECIMAL(10,2))
     avg_price_blue = Column(DECIMAL(10,2))

@@ -29,7 +29,9 @@ export default function StatsPanel() {
             letterSpacing: "0.05em",
           }}
         >
-          {stats.most_expensive_card_uuid?.slice(0, 8)}...
+          {stats.most_expensive_card_name ||
+            stats.most_expensive_card_uuid?.slice(0, 8)}
+          ...
         </div>
       </div>
 
