@@ -6,6 +6,7 @@ export default function SearchPanel({ query }) {
   const [results, setResults] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [priceHistories, setPriceHistories] = useState({});
+  const [cardImages, setCardImages] = useState({});
 
   useEffect(() => {
     if (!query) return;
@@ -16,6 +17,26 @@ export default function SearchPanel({ query }) {
     }, 300);
     return () => clearTimeout(timer);
   }, [query]);
+
+  useEffect(() => {
+    if (!selectedCard) return;
+    fetch(
+      `https://api.scryfall.com/cards/${selectedCard.set_code}/${selectedCard.collector_number}`,
+    )
+      .then((res) => res.json())
+      .then((data) =>
+        setCardImages((prev) => ({
+          ...prev,
+          [selectedCard.uuid]: data.image_uris?.normal || null,
+        })),
+      )
+      .catch(() =>
+        setCardImages((prev) => ({
+          ...prev,
+          [selectedCard.uuid]: null,
+        })),
+      );
+  }, [selectedCard]);
 
   useEffect(() => {
     if (!selectedCard) return;
@@ -33,6 +54,7 @@ export default function SearchPanel({ query }) {
   }, [selectedCard]);
 
   const currentPrices = priceHistories[selectedCard?.uuid] ?? [];
+  const currentImage = cardImages[selectedCard?.uuid] ?? null;
 
   if (!query) {
     return (
@@ -69,6 +91,18 @@ export default function SearchPanel({ query }) {
 
       {selectedCard && (
         <div className="card-detail">
+          {currentImage && (
+            <img
+              src={currentImage}
+              alt={selectedCard.name}
+              style={{
+                width: "100%",
+                maxWidth: "280px",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+              }}
+            />
+          )}
           <div className="card-name">{selectedCard.name}</div>
           <div className="card-type">
             {selectedCard.mana_cost || "No mana cost"}
