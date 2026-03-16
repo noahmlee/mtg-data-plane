@@ -8,7 +8,14 @@ export default function StatsPanel() {
 
   useEffect(() => {
     if (!stats?.most_expensive_card_uuid) return;
-    fetch(`https://api.scryfall.com/cards/${stats.most_expensive_card_uuid}`)
+    axios
+      .get(`${API}/cards/${stats.most_expensive_card_uuid}`)
+      .then((res) => {
+        const { set_code, collector_number } = res.data;
+        return fetch(
+          `https://api.scryfall.com/cards/${set_code}/${collector_number}`,
+        );
+      })
       .then((res) => res.json())
       .then((data) => setMostExpensiveImage(data.image_uris?.normal || null))
       .catch(() => setMostExpensiveImage(null));
