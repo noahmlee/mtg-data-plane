@@ -33,16 +33,26 @@ class DailyStatsPipeline(BasePipeline):
             SELECT c.rarity, AVG(p.price_usd)
             FROM cards c
             JOIN prices p ON c.uuid = p.card_uuid
-            WHERE p.price_date = :today AND p.format = 'normal'
-            GROUP BY c.rarity                                                   
+            WHERE p.price_date = :today 
+            AND p.format = 'normal'
+            AND p.price_usd > 0
+            AND c.rarity IN ('common', 'uncommon', 'rare', 'mythic', 'special')
+            GROUP BY c.rarity
         """), {"today": self.today}).fetchall()
         
         by_cmc = self.session.execute(text("""
             SELECT c.mana_value, AVG(p.price_usd)
             FROM cards c
             JOIN prices p ON c.uuid = p.card_uuid
-            WHERE p.price_date = :today AND p.format = 'normal'
-            GROUP BY c.mana_value                                                    
+            WHERE p.price_date = :today
+            AND p.format = 'normal'
+            AND p.price_usd > 0
+            AND c.mana_value IS NOT NULL
+            AND c.mana_value >= 0
+            AND c.mana_value != 0.5
+            AND c.mana_value <= 16
+            GROUP BY c.mana_value
+            ORDER BY c.mana_value
         """), {"today": self.today}).fetchall()
         
         by_color = self.session.execute(text("""

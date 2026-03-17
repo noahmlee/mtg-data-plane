@@ -2,6 +2,32 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API, RARITY_COLORS } from "../constants";
 
+const FRAME_EFFECT_LABELS = {
+  borderless: "Borderless",
+  showcase: "Showcase",
+  extendedart: "Extended Art",
+  etched: "Etched",
+  fullart: "Full Art",
+  embossed: "Embossed",
+  gilded: "Gilded",
+  halofoil: "Halo Foil",
+  serialized: "Serialized",
+  textless: "Textless",
+  upsidedown: "Upside Down",
+  stepandcompleat: "Compleat",
+  inverted: "Inverted",
+};
+
+function getFrameLabels(card) {
+  const effects = card.frame_effects;
+  if (!effects) return [];
+  const parsed = typeof effects === "string" ? JSON.parse(effects) : effects;
+  if (!parsed || parsed.length === 0) return [];
+  return parsed
+    .filter((effect) => FRAME_EFFECT_LABELS[effect])
+    .map((effect) => FRAME_EFFECT_LABELS[effect]);
+}
+
 export default function SearchPanel({ query }) {
   const [results, setResults] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -69,24 +95,34 @@ export default function SearchPanel({ query }) {
     <div>
       <div className="panel-title">{results.length} Results</div>
       <ul className="results-list">
-        {results.map((card) => (
-          <li
-            key={card.uuid}
-            className={`result-item ${selectedCard?.uuid === card.uuid ? "active" : ""}`}
-            onClick={() => setSelectedCard(card)}
-          >
-            <span className="result-name">{card.name}</span>
-            <span className="result-meta">
-              <span className="set-code">{card.set_code}</span>
-              <span
-                className="rarity-badge"
-                style={{ color: RARITY_COLORS[card.rarity] || "#a0a0a0" }}
-              >
-                {card.rarity}
+        {results.map((card) => {
+          const frameLabels = getFrameLabels(card);
+          return (
+            <li
+              key={card.uuid}
+              className={`result-item ${selectedCard?.uuid === card.uuid ? "active" : ""}`}
+              onClick={() => setSelectedCard(card)}
+            >
+              <span className="result-name">
+                {card.name}
+                {frameLabels.map((label) => (
+                  <span key={label} className="frame-badge">
+                    {label}
+                  </span>
+                ))}
               </span>
-            </span>
-          </li>
-        ))}
+              <span className="result-meta">
+                <span className="set-code">{card.set_code}</span>
+                <span
+                  className="rarity-badge"
+                  style={{ color: RARITY_COLORS[card.rarity] || "#a0a0a0" }}
+                >
+                  {card.rarity}
+                </span>
+              </span>
+            </li>
+          );
+        })}
       </ul>
 
       {selectedCard && (

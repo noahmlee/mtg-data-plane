@@ -130,6 +130,37 @@ export const styles = `
     margin-top: 0.2rem;
   }
 
+  .tab-row {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0.5rem 0 0.75rem;
+  }
+
+  .tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 3px;
+    border: 1px solid rgba(200, 168, 75, 0.2);
+    background: transparent;
+    color: rgba(232, 220, 200, 0.4);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tab-btn:hover {
+    border-color: rgba(200, 168, 75, 0.4);
+    color: rgba(232, 220, 200, 0.7);
+  }
+
+  .tab-btn.active {
+    border-color: #c8a84b;
+    color: #c8a84b;
+    background: rgba(200, 168, 75, 0.08);
+  }
+
   .color-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -169,6 +200,51 @@ export const styles = `
   .color-label {
     font-size: 0.7rem;
     color: rgba(232, 220, 200, 0.4);
+  }
+
+  .cmc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
+  }
+
+  .cmc-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .cmc-label {
+    width: 50px;
+    color: rgba(232, 220, 200, 0.5);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .cmc-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .cmc-bar {
+    display: block;
+    height: 100%;
+    background: #c8a84b;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .cmc-value {
+    width: 45px;
+    text-align: right;
+    font-size: 0.8rem;
+    color: #e8dcc8;
+    flex-shrink: 0;
   }
 
   .content-area {
@@ -251,12 +327,55 @@ export const styles = `
     to { opacity: 1; transform: translateY(0); }
   }
 
+  .card-detail-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .card-detail-left {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  .card-detail-right {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 500px;
+  }
+
+  .card-header-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    width: 100%;
+  }
+
+  .card-mana {
+    font-size: 0.9rem;
+    color: rgba(232, 220, 200, 0.6);
+    font-style: italic;
+    white-space: nowrap;
+  }
+
   .card-name {
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
     font-weight: 600;
     color: #e8dcc8;
     margin-bottom: 0.25rem;
+  }
+
+  .card-type {
+    font-size: 0.85rem;
+    color: rgba(232, 220, 200, 0.45);
+    font-style: italic;
+    margin-bottom: 1rem;
   }
 
   .card-stats-row {
@@ -402,39 +521,16 @@ export const styles = `
     background: rgba(200, 168, 75, 0.6);
   }
 
-  .card-detail-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .card-detail-left {
-    display: flex;
-    flex-direction: column;
-    width: 280px;
-    flex-shrink: 0;
-  }
-
-  .card-detail-right {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    max-height: 500px;
-  }
-
-  .card-header-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-    width: 100%;
-  }
-
-  .card-mana {
-    font-size: 0.9rem;
-    color: rgba(232, 220, 200, 0.6);
-    font-style: italic;
-    white-space: nowrap;
+  .frame-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    background: rgba(200, 168, 75, 0.12);
+    color: #c8a84b;
+    margin-left: 0.4rem;
+    vertical-align: middle;
   }
 `;

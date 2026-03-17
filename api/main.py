@@ -4,14 +4,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
-origins = ["http://localhost:5173",
-           "http://localhost",
+origins = [
+    "http://localhost:5173",
+    "http://localhost",
 ]
 ec2_ip = os.getenv("EC2_PUBLIC_IP")
 if ec2_ip:
     origins.append(f"http://{ec2_ip}")
     origins.append(f"https://{ec2_ip}")
-    
+
 app = FastAPI(title="MTG Price Tracker API")
 app.add_middleware(
     CORSMiddleware,
@@ -30,18 +31,18 @@ def get_db():
         yield db
     finally:
         db.close()
-    
+
 @app.get("/health")
 def health():
-    return{"status": "ok"}
+    return {"status": "ok"}
 
 @app.get("/cards/search")
 def search_cards(name: str, limit: int = 50, db: Session = Depends(get_db)):
     results = db.execute(
-        text("SELECT uuid, name, mana_cost, color_identity, rarity, set_code, collector_number FROM cards WHERE name LIKE :name LIMIT :limit"),
+        text("SELECT uuid, name, mana_cost, color_identity, rarity, set_code, collector_number, frame_effects FROM cards WHERE name LIKE :name LIMIT :limit"),
         {"name": f"%{name}%", "limit": limit}
     ).fetchall()
-    
+
     return [
         {
             "uuid": r[0],
@@ -50,17 +51,18 @@ def search_cards(name: str, limit: int = 50, db: Session = Depends(get_db)):
             "color_identity": r[3],
             "rarity": r[4],
             "set_code": r[5],
-            "collector_number": r[6]
+            "collector_number": r[6],
+            "frame_effects": r[7],
         }
         for r in results
     ]
-    
+
 @app.get("/cards/{uuid}")
 def get_card(uuid: str, db: Session = Depends(get_db)):
     result = db.execute(
         text("""
-            SELECT c.uuid, c.name, c.mana_cost, c.color_identity, c.rarity, 
-                   c.set_code, c.collector_number, p.price_usd, p.price_date
+            SELECT c.uuid, c.name, c.mana_cost, c.color_identity, c.rarity,
+                   c.set_code, c.collector_number, c.frame_effects, p.price_usd, p.price_date
             FROM cards c
             LEFT JOIN prices p ON c.uuid = p.card_uuid
             AND p.price_date = (SELECT MAX(price_date) FROM prices WHERE card_uuid = c.uuid)
@@ -69,10 +71,10 @@ def get_card(uuid: str, db: Session = Depends(get_db)):
         """),
         {"uuid": uuid}
     ).fetchone()
-    
+
     if not result:
         raise HTTPException(status_code=404, detail="Card not found")
-    
+
     return {
         "uuid": result[0],
         "name": result[1],
@@ -81,16 +83,37 @@ def get_card(uuid: str, db: Session = Depends(get_db)):
         "rarity": result[4],
         "set_code": result[5],
         "collector_number": result[6],
-        "price": float(result[7]) if result[7] is not None else None,
-        "price_date": str(result[8]) if result[8] is not None else None,
+        "frame_effects": result[7],
+        "price": float(result[8]) if result[8] is not None else None,
+        "price_date": str(result[9]) if result[9] is not None else None,
     }
-    
+
+@app.get("/cards/{uuid}/prices")
+def get_card_prices(uuid: str, db: Session = Depends(get_db)):
+    results = db.execute(
+        text("""
+            SELECT price_date, format, price_usd
+            FROM prices
+            WHERE card_uuid = :uuid
+            ORDER BY price_date DESC
+        """),
+        {"uuid": uuid}
+    ).fetchall()
+
+    if not results:
+        raise HTTPException(status_code=404, detail="No prices found")
+
+    return [
+        {"price_date": str(r[0]), "format": r[1], "price_usd": float(r[2])}
+        for r in results
+    ]
+
 @app.get("/stats/latest")
 def get_latest_stats(db: Session = Depends(get_db)):
     result = db.execute(
         text("SELECT * FROM daily_stats ORDER BY stat_date DESC LIMIT 1")
     ).fetchone()
-    
+
     if not result:
         raise HTTPException(status_code=404, detail="No stats found")
 
@@ -102,28 +125,8 @@ def get_stats_by_date(date: str, db: Session = Depends(get_db)):
         text("SELECT * FROM daily_stats WHERE stat_date = :date LIMIT 1"),
         {"date": date}
     ).fetchone()
-    
+
     if not result:
         raise HTTPException(status_code=404, detail="No stats found")
-    
-    return dict(result._mapping)
 
-@app.get("/cards/{uuid}/prices")
-def get_card_price(uuid: str, db: Session = Depends(get_db)):
-    results = db.execute(
-        text("""
-            SELECT price_date, format, price_usd
-            FROM prices
-            WHERE card_uuid = :uuid
-            ORDER BY price_date DESC
-        """),
-        {"uuid": uuid}
-    ).fetchall()
-    
-    if not results:
-        raise HTTPException(status_code=404, detail="No prices found")
-    
-    return [
-        {"price_date": str(r[0]), "format": r[1], "price_usd": float(r[2])}
-        for r in results
-    ]
+    return dict(result._mapping)

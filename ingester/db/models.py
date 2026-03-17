@@ -27,6 +27,7 @@ class Card(Base):
     collector_number = Column(String(10))
     is_foil_only = Column(Boolean, default=False)
     is_promo = Column(Boolean, default=False)
+    frame_effects = Column(JSON)
     created_at = Column(DateTime, server_default=func.now())
     
 class CardPrice(Base):

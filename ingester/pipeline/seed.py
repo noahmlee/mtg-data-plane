@@ -61,6 +61,7 @@ class AllPrintingsSeedPipeline(BasePipeline):
                         "collector_number": card.get("number"),
                         "is_foil_only": card.get("isFoilOnly", False),
                         "is_promo": card.get("isPromo", False),
+                        "frame_effects": card.get("frameEffects", []),
                     })
 
                 for i in range(0, len(cards), 1000):
@@ -78,6 +79,7 @@ class AllPrintingsSeedPipeline(BasePipeline):
                         collector_number=stmt.inserted.collector_number,
                         is_foil_only=stmt.inserted.is_foil_only,
                         is_promo=stmt.inserted.is_promo,
+                        frame_effects=stmt.inserted.frame_effects,
                     )
                     self.session.execute(stmt)
 
