@@ -4,10 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
-origins = ["https://localhost:5173"]
+origins = ["http://localhost:5173",
+           "http://localhost",
+]
 ec2_ip = os.getenv("EC2_PUBLIC_IP")
 if ec2_ip:
     origins.append(f"http://{ec2_ip}")
+    origins.append(f"https://{ec2_ip}")
     
 app = FastAPI(title="MTG Price Tracker API")
 app.add_middleware(

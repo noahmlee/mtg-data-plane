@@ -259,18 +259,11 @@ export const styles = `
     margin-bottom: 0.25rem;
   }
 
-  .card-type {
-    font-size: 0.85rem;
-    color: rgba(232, 220, 200, 0.45);
-    font-style: italic;
-    margin-bottom: 1rem;
-  }
-
   .card-stats-row {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 0.75rem;
   }
 
   .card-stat {
@@ -407,5 +400,41 @@ export const styles = `
 
   .results-list::-webkit-scrollbar-thumb:hover {
     background: rgba(200, 168, 75, 0.6);
+  }
+
+  .card-detail-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .card-detail-left {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  .card-detail-right {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 500px;
+  }
+
+  .card-header-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    width: 100%;
+  }
+
+  .card-mana {
+    font-size: 0.9rem;
+    color: rgba(232, 220, 200, 0.6);
+    font-style: italic;
+    white-space: nowrap;
   }
 `;

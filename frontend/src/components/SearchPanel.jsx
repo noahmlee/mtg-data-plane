@@ -91,73 +91,89 @@ export default function SearchPanel({ query }) {
 
       {selectedCard && (
         <div className="card-detail">
-          {currentImage && (
-            <img
-              src={currentImage}
-              alt={selectedCard.name}
-              style={{
-                width: "100%",
-                maxWidth: "280px",
-                borderRadius: "8px",
-                marginBottom: "1rem",
-              }}
-            />
-          )}
-          <div className="card-name">{selectedCard.name}</div>
-          <div className="card-type">
-            {selectedCard.mana_cost || "No mana cost"}
-          </div>
-          <div className="card-stats-row">
-            <div className="card-stat">
-              <span className="card-stat-label">Set</span>
-              <span className="card-stat-value">{selectedCard.set_code}</span>
+          <div className="card-detail-inner">
+            <div className="card-detail-left">
+              <div className="card-header-row">
+                <div className="card-name">{selectedCard.name}</div>
+                <div className="card-mana">{selectedCard.mana_cost || "—"}</div>
+              </div>
+              {currentImage && (
+                <img
+                  src={currentImage}
+                  alt={selectedCard.name}
+                  style={{
+                    width: "100%",
+                    maxWidth: "280px",
+                    borderRadius: "8px",
+                    margin: "0.75rem 0",
+                  }}
+                />
+              )}
+              <div className="card-stats-row">
+                <div className="card-stat">
+                  <span className="card-stat-label">Set</span>
+                  <span className="card-stat-value">
+                    {selectedCard.set_code}
+                  </span>
+                </div>
+                <div className="card-stat">
+                  <span className="card-stat-label">Rarity</span>
+                  <span
+                    className="card-stat-value"
+                    style={{ color: RARITY_COLORS[selectedCard.rarity] }}
+                  >
+                    {selectedCard.rarity}
+                  </span>
+                </div>
+                <div className="card-stat">
+                  <span className="card-stat-label">Collector #</span>
+                  <span className="card-stat-value">
+                    {selectedCard.collector_number || "—"}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="card-stat">
-              <span className="card-stat-label">Rarity</span>
-              <span
-                className="card-stat-value"
-                style={{ color: RARITY_COLORS[selectedCard.rarity] }}
-              >
-                {selectedCard.rarity}
-              </span>
-            </div>
-            <div className="card-stat">
-              <span className="card-stat-label">Collector #</span>
-              <span className="card-stat-value">
-                {selectedCard.collector_number || "—"}
-              </span>
-            </div>
-          </div>
 
-          <div className="divider" />
-          <div className="price-history-title">Price History</div>
-
-          {currentPrices.length === 0 ? (
-            <p className="no-data">No price data on record</p>
-          ) : (
-            <table className="price-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Format</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentPrices.map((p, i) => (
-                  <tr key={i}>
-                    <td>{p.price_date}</td>
-                    <td>
-                      <span className={`format-badge ${p.format}`}>
-                        {p.format}
-                      </span>
-                    </td>
-                    <td>${Number(p.price_usd).toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+            <div className="card-detail-right">
+              <div className="price-history-title">Price History</div>
+              {currentPrices.length === 0 ? (
+                <p className="no-data">No price data on record</p>
+              ) : (
+                <table className="price-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Normal</th>
+                      <th>Foil</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(
+                      currentPrices.reduce((acc, p) => {
+                        if (!acc[p.price_date]) acc[p.price_date] = {};
+                        acc[p.price_date][p.format] = p.price_usd;
+                        return acc;
+                      }, {}),
+                    ).map(([date, prices]) => (
+                      <tr key={date}>
+                        <td>{date}</td>
+                        <td>
+                          {prices.normal
+                            ? `$${Number(prices.normal).toFixed(2)}`
+                            : "—"}
+                        </td>
+                        <td style={{ color: "#c8a84b" }}>
+                          {prices.foil
+                            ? `$${Number(prices.foil).toFixed(2)}`
+                            : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
