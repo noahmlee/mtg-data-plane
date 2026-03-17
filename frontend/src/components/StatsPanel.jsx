@@ -2,9 +2,43 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API, COLOR_SYMBOLS } from "../constants";
 
+function PriceChange({ current, previous }) {
+  if (!previous || !current) return null;
+  const diff = Number(current) - Number(previous);
+  if (Math.abs(diff) < 0.01) return null;
+  const up = diff > 0;
+  return (
+    <span
+      style={{
+        fontSize: "0.65rem",
+        color: up ? "#60b870" : "#e07060",
+        marginLeft: "0.25rem",
+      }}
+    >
+      {up ? "▲" : "▼"} ${Math.abs(diff).toFixed(2)}
+    </span>
+  );
+}
+
 export default function StatsPanel() {
   const [stats, setStats] = useState(null);
+  const [yesterdayStats, setYesterdayStats] = useState(null);
   const [mostExpensiveImage, setMostExpensiveImage] = useState(null);
+
+  useEffect(() => {
+    axios.get(`${API}/stats/latest`).then((res) => setStats(res.data));
+  }, []);
+
+  useEffect(() => {
+    if (!stats) return;
+    const yesterday = new Date(stats.stat_date);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dateStr = yesterday.toISOString().split("T")[0];
+    axios
+      .get(`${API}/stats/${dateStr}`)
+      .then((res) => setYesterdayStats(res.data))
+      .catch(() => setYesterdayStats(null));
+  }, [stats]);
 
   useEffect(() => {
     if (!stats?.most_expensive_card_uuid) return;
@@ -20,10 +54,6 @@ export default function StatsPanel() {
       .then((data) => setMostExpensiveImage(data.image_uris?.normal || null))
       .catch(() => setMostExpensiveImage(null));
   }, [stats]);
-
-  useEffect(() => {
-    axios.get(`${API}/stats/latest`).then((res) => setStats(res.data));
-  }, []);
 
   if (!stats) return <p className="loading">Consulting the oracle...</p>;
 
@@ -81,6 +111,10 @@ export default function StatsPanel() {
                   <div>
                     <div className="color-price">
                       ${Number(stats[key]).toFixed(2)}
+                      <PriceChange
+                        current={stats[key]}
+                        previous={yesterdayStats?.[key]}
+                      />
                     </div>
                     <div className="color-label">{label}</div>
                   </div>
