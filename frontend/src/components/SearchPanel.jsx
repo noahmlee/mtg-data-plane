@@ -39,33 +39,34 @@ function getFrameLabels(card) {
 function PriceChart({ data, dataKey, color, label }) {
   if (!data || data.length < 2) return null;
   return (
-    <div style={{ marginBottom: "0.75rem" }}>
+    <div style={{ marginBottom: "0.75rem", marginRight: "0.50rem" }}>
       <div className="price-history-title">{label}</div>
-      <ResponsiveContainer width="100%" height={100}>
+      <ResponsiveContainer width="100%" height={160}>
         <LineChart
           data={data}
-          margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+          margin={{ top: 8, right: 8, left: -10, bottom: 0 }}
         >
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 8, fill: "rgba(232,220,200,0.3)" }}
+            tick={{ fontSize: 10, fill: "rgba(232,220,200,0.4)" }}
             tickLine={false}
             axisLine={false}
             interval="preserveStartEnd"
           />
           <YAxis
-            tick={{ fontSize: 8, fill: "rgba(232,220,200,0.3)" }}
+            tick={{ fontSize: 10, fill: "rgba(232,220,200,0.4)" }}
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `$${v}`}
             domain={["auto", "auto"]}
+            width={45}
           />
           <Tooltip
             contentStyle={{
               background: "#1a1a2e",
               border: "1px solid rgba(200,168,75,0.3)",
               borderRadius: "4px",
-              fontSize: "0.75rem",
+              fontSize: "0.8rem",
               color: "#e8dcc8",
             }}
             formatter={(v) => [`$${Number(v).toFixed(2)}`, label]}
@@ -75,9 +76,9 @@ function PriceChart({ data, dataKey, color, label }) {
             type="monotone"
             dataKey={dataKey}
             stroke={color}
-            strokeWidth={1.5}
+            strokeWidth={2}
             dot={false}
-            activeDot={{ r: 3, fill: color }}
+            activeDot={{ r: 4, fill: color }}
           />
         </LineChart>
       </ResponsiveContainer>

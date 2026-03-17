@@ -89,6 +89,24 @@ export const styles = `
     overflow-y: auto;
   }
 
+  .sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 2px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(200, 168, 75, 0.3);
+    border-radius: 2px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(200, 168, 75, 0.6);
+  }
+
   .panel-title {
     font-family: 'Cinzel', serif;
     font-size: 0.7rem;
@@ -263,6 +281,24 @@ export const styles = `
     overflow-y: auto;
   }
 
+  .results-list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .results-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 2px;
+  }
+
+  .results-list::-webkit-scrollbar-thumb {
+    background: rgba(200, 168, 75, 0.3);
+    border-radius: 2px;
+  }
+
+  .results-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(200, 168, 75, 0.6);
+  }
+
   .result-item {
     display: flex;
     align-items: center;
@@ -314,6 +350,19 @@ export const styles = `
     letter-spacing: 0.05em;
   }
 
+  .frame-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    background: rgba(200, 168, 75, 0.12);
+    color: #c8a84b;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+
   .card-detail {
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(200, 168, 75, 0.2);
@@ -345,6 +394,24 @@ export const styles = `
     flex-direction: column;
     overflow-y: auto;
     max-height: 500px;
+  }
+
+  .card-detail-right::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .card-detail-right::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 2px;
+  }
+
+  .card-detail-right::-webkit-scrollbar-thumb {
+    background: rgba(200, 168, 75, 0.3);
+    border-radius: 2px;
+  }
+
+  .card-detail-right::-webkit-scrollbar-thumb:hover {
+    background: rgba(200, 168, 75, 0.6);
   }
 
   .card-header-row {
@@ -444,6 +511,24 @@ export const styles = `
   .price-table tr:last-child td { border-bottom: none; }
   .price-table tr:hover td { background: rgba(255,255,255,0.02); }
 
+  .expand-btn {
+    background: none;
+    border: none;
+    color: #c8a84b;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.4rem 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+  }
+
+  .expand-btn:hover {
+    opacity: 1;
+  }
+
   .format-badge {
     display: inline-block;
     padding: 0.1rem 0.45rem;
@@ -501,54 +586,5 @@ export const styles = `
     color: rgba(232, 220, 200, 0.35);
     margin-bottom: 1rem;
     letter-spacing: 0.05em;
-  }
-
-  .results-list::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .results-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 2px;
-  }
-
-  .results-list::-webkit-scrollbar-thumb {
-    background: rgba(200, 168, 75, 0.3);
-    border-radius: 2px;
-  }
-
-  .results-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(200, 168, 75, 0.6);
-  }
-
-  .frame-badge {
-    font-family: 'Cinzel', serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.1rem 0.35rem;
-    border-radius: 3px;
-    background: rgba(200, 168, 75, 0.12);
-    color: #c8a84b;
-    margin-left: 0.4rem;
-    vertical-align: middle;
-  }
-
-  .expand-btn {
-    background: none;
-    border: none;
-    color: #c8a84b;
-    font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 0.4rem 0;
-    opacity: 0.7;
-    transition: opacity 0.15s;
-  }
-
-  .expand-btn:hover {
-    opacity: 1;
   }
 `;
