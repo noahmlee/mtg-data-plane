@@ -533,4 +533,22 @@ export const styles = `
     margin-left: 0.4rem;
     vertical-align: middle;
   }
+
+  .expand-btn {
+    background: none;
+    border: none;
+    color: #c8a84b;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.4rem 0;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+  }
+
+  .expand-btn:hover {
+    opacity: 1;
+  }
 `;
